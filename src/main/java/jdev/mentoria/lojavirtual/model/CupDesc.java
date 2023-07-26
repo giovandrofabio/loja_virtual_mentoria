@@ -16,56 +16,43 @@ public class CupDesc implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_cup_desc")
     private Long id;
-
+    @Column(nullable = false)
     private String codDesc;
-
     private BigDecimal valorRealDesc;
-
     private BigDecimal valorPorcentDesc;
-
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataValidadeCupom;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getCodDesc() {
         return codDesc;
     }
-
     public void setCodDesc(String codDesc) {
         this.codDesc = codDesc;
     }
-
     public BigDecimal getValorRealDesc() {
         return valorRealDesc;
     }
-
     public void setValorRealDesc(BigDecimal valorRealDesc) {
         this.valorRealDesc = valorRealDesc;
     }
-
     public BigDecimal getValorPorcentDesc() {
         return valorPorcentDesc;
     }
-
     public void setValorPorcentDesc(BigDecimal valorPorcentDesc) {
         this.valorPorcentDesc = valorPorcentDesc;
     }
-
     public Date getDataValidadeCupom() {
         return dataValidadeCupom;
     }
-
     public void setDataValidadeCupom(Date dataValidadeCupom) {
         this.dataValidadeCupom = dataValidadeCupom;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,7 +60,6 @@ public class CupDesc implements Serializable {
         CupDesc cupDesc = (CupDesc) o;
         return getId().equals(cupDesc.getId());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getId());

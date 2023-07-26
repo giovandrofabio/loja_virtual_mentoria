@@ -16,23 +16,18 @@ public class CategoriaProduto implements Serializable {
     private Long id;
     @Column(name="nome_desc", nullable = false)
     private String nomeDesc;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNomeDesc() {
         return nomeDesc;
     }
-
     public void setNomeDesc(String nomeDesc) {
         this.nomeDesc = nomeDesc;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,7 +35,6 @@ public class CategoriaProduto implements Serializable {
         CategoriaProduto that = (CategoriaProduto) o;
         return getId().equals(that.getId());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getId());

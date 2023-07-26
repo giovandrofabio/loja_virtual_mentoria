@@ -18,51 +18,39 @@ public class StatusRstreio implements Serializable {
     private String cidade;
     private String estado;
     private String status;
-
     @ManyToOne
     @JoinColumn(name = "venda_compra_loja_virt_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virt_fk"))
     private VendaCompraLojaVirtual vendaCompraLojaVirtual;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getCentroDistribuicao() {
         return centroDistribuicao;
     }
-
     public void setCentroDistribuicao(String centroDistribuicao) {
         this.centroDistribuicao = centroDistribuicao;
     }
-
     public String getCidade() {
         return cidade;
     }
-
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
-
     public String getEstado() {
         return estado;
     }
-
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +58,6 @@ public class StatusRstreio implements Serializable {
         StatusRstreio that = (StatusRstreio) o;
         return getId().equals(that.getId());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getId());

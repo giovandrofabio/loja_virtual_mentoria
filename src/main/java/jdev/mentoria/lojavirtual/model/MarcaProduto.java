@@ -16,23 +16,18 @@ public class MarcaProduto implements Serializable {
     private Long id;
     @Column(nullable = false)
     private String nomeDesc;
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getNomeDesc() {
         return nomeDesc;
     }
-
     public void setNomeDesc(String nomeDesc) {
         this.nomeDesc = nomeDesc;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,7 +35,6 @@ public class MarcaProduto implements Serializable {
         MarcaProduto that = (MarcaProduto) o;
         return getId().equals(that.getId()) && Objects.equals(getNomeDesc(), that.getNomeDesc());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getNomeDesc());

@@ -17,28 +17,22 @@ public class Acesso implements GrantedAuthority {
     private Long id;
     @Column(nullable = false)
     private String descricao; /*Acesso ex: ROLE_ADMIN ou ROLE_SECRETARIO */
-
     @Override
     public String getAuthority() {
         return this.descricao;
     }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getDescricao() {
         return descricao;
     }
-
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,7 +40,6 @@ public class Acesso implements GrantedAuthority {
         Acesso acesso = (Acesso) o;
         return getId().equals(acesso.getId());
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(getId());
