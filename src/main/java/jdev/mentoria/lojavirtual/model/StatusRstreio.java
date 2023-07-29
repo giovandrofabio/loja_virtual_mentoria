@@ -1,9 +1,16 @@
 package jdev.mentoria.lojavirtual.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name="status_rastreio")
 @SequenceGenerator(name="seq_status_rastreio", sequenceName ="seq_status_rastreio", allocationSize = 1, initialValue = 1)
@@ -21,45 +28,4 @@ public class StatusRstreio implements Serializable {
     @ManyToOne
     @JoinColumn(name = "venda_compra_loja_virt_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "venda_compra_loja_virt_fk"))
     private VendaCompraLojaVirtual vendaCompraLojaVirtual;
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getCentroDistribuicao() {
-        return centroDistribuicao;
-    }
-    public void setCentroDistribuicao(String centroDistribuicao) {
-        this.centroDistribuicao = centroDistribuicao;
-    }
-    public String getCidade() {
-        return cidade;
-    }
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-    public String getEstado() {
-        return estado;
-    }
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StatusRstreio)) return false;
-        StatusRstreio that = (StatusRstreio) o;
-        return getId().equals(that.getId());
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
 }

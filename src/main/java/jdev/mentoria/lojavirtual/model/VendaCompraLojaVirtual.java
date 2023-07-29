@@ -1,5 +1,9 @@
 package jdev.mentoria.lojavirtual.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.xml.crypto.Data;
 import java.io.Serializable;
@@ -7,6 +11,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name="vd_cp_loja_virt")
 @SequenceGenerator(name="seq_vd_cp_loja_virt", sequenceName ="seq_vd_cp_loja_virt", allocationSize = 1, initialValue = 1)
@@ -48,93 +55,4 @@ public class VendaCompraLojaVirtual implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataEntrega;
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-    public Endereco getEnderecoEntrega() {
-        return enderecoEntrega;
-    }
-    public void setEnderecoEntrega(Endereco enderecoEntrega) {
-        this.enderecoEntrega = enderecoEntrega;
-    }
-    public Endereco getEnderecoCobranca() {
-        return enderecoCobranca;
-    }
-    public void setEnderecoCobranca(Endereco enderecoCobranca) {
-        this.enderecoCobranca = enderecoCobranca;
-    }
-    public BigDecimal getValorTotal() {
-        return valorTotal;
-    }
-    public void setValorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-    }
-    public BigDecimal getValorDesconto() {
-        return valorDesconto;
-    }
-    public void setValorDesconto(BigDecimal valorDesconto) {
-        this.valorDesconto = valorDesconto;
-    }
-    public FormaPagamento getFormaPagamento() {
-        return formaPagamento;
-    }
-    public void setFormaPagamento(FormaPagamento formaPagamento) {
-        this.formaPagamento = formaPagamento;
-    }
-    public NotaFiscalVenda getNotaFiscalVenda() {
-        return notaFiscalVenda;
-    }
-    public void setNotaFiscalVenda(NotaFiscalVenda notaFiscalVenda) {
-        this.notaFiscalVenda = notaFiscalVenda;
-    }
-    public CupDesc getCupDesc() {
-        return cupDesc;
-    }
-    public void setCupDesc(CupDesc cupDesc) {
-        this.cupDesc = cupDesc;
-    }
-    public BigDecimal getValorFrent() {
-        return valorFrent;
-    }
-    public void setValorFrent(BigDecimal valorFrent) {
-        this.valorFrent = valorFrent;
-    }
-    public Integer getDiaEntrega() {
-        return diaEntrega;
-    }
-    public void setDiaEntrega(Integer diaEntrega) {
-        this.diaEntrega = diaEntrega;
-    }
-    public Date getDataVenda() {
-        return dataVenda;
-    }
-    public void setDataVenda(Date dataVenda) {
-        this.dataVenda = dataVenda;
-    }
-    public Date getDataEntrega() {
-        return dataEntrega;
-    }
-    public void setDataEntrega(Date dataEntrega) {
-        this.dataEntrega = dataEntrega;
-    }
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof VendaCompraLojaVirtual)) return false;
-        VendaCompraLojaVirtual that = (VendaCompraLojaVirtual) o;
-        return getId().equals(that.getId());
-    }
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
 }
