@@ -195,7 +195,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 	}
 
 	@Test
-	public void testeCadastraAcesso() {
+	public void testeCadastraAcesso() throws ExceptionMentoriaJava {
 
 		Acesso acesso = new Acesso();
 
