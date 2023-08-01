@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Calendar;
 import java.util.List;
 //@RunWith(SpringRunner.class)
 @Profile("test")
@@ -49,8 +50,10 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 //		DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 
+		String desc_acesso = "ROLE_COMPRADOR" + Calendar.getInstance().getTimeInMillis();
+
 		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_COMPRADOR");
+		acesso.setDescricao(desc_acesso);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -199,7 +202,9 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 
 		Acesso acesso = new Acesso();
 
-		acesso.setDescricao("ROLE_ADMIN");
+		String desc_acesso = "ROLE_ADMIN" + Calendar.getInstance().getTimeInMillis();
+
+		acesso.setDescricao(desc_acesso);
 
 		assertTrue(acesso.getId() == null);
 
@@ -209,7 +214,7 @@ public class LojaVirtualMentoriaApplicationTests extends TestCase {
 		assertEquals(true, acesso.getId() > 0);
 
 		/*Validar dados salvos da forma correta*/
-		assertEquals("ROLE_ADMIN", acesso.getDescricao());
+		assertEquals(desc_acesso, acesso.getDescricao());
 
 		/*Teste de carregamento*/
 
