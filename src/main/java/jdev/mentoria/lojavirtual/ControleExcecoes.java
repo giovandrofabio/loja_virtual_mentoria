@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.AuthenticationFailedException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -53,6 +54,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
             }
         } if(ex instanceof HttpMessageNotReadableException) {
             msg = "Não está sendo enviado dados para o BODY corpo da requisição";
+        } if(ex instanceof AuthenticationFailedException) {
+            msg = "E-mail enviado com sucesso!";
         }
         else {
             msg = ex.getMessage();

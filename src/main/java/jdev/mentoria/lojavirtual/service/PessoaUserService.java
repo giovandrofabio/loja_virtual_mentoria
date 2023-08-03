@@ -24,9 +24,17 @@ public class PessoaUserService {
     private PesssoaRepository pesssoaRepository;
 
     @Autowired
+    private ServiceSendEmail serviceSendEmail;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     public PessoaJuridica salvarPessoaJuridica(PessoaJuridica juridica) {
+
+        for (int i = 0; i< juridica.getEnderecos().size(); i++) {
+            juridica.getEnderecos().get(i).setPessoa(juridica);
+            juridica.getEnderecos().get(i).setEmpresa(juridica);
+        }
 
         juridica = pesssoaRepository.save(juridica);
 
@@ -53,6 +61,20 @@ public class PessoaUserService {
             usuarioPj = usuarioRepository.save(usuarioPj);
 
             usuarioRepository.insereAcessoUserPj(usuarioPj.getId());
+
+            /* Fazer o envio de e-mail do logine da senha */
+            StringBuilder menssagemHtml = new StringBuilder();
+
+            menssagemHtml.append("<b>Segue abaixo seus dados de acesso para a loja virtual</b>");
+            menssagemHtml.append("<b>Login: </b>"+juridica.getEmail()+"</b><br/>");
+            menssagemHtml.append("<b>Senha: </b>").append(senha).append("<br/><br/>");
+            menssagemHtml.append("Obrigado!");
+
+            try {
+                serviceSendEmail.enviarEmailHtml("Acesso Gerado para Loja Virtual", menssagemHtml.toString() , juridica.getEmail());
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
