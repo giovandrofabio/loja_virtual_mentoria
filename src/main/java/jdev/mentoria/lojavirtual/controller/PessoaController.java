@@ -18,6 +18,8 @@ import jdev.mentoria.lojavirtual.model.PessoaJuridica;
 import jdev.mentoria.lojavirtual.repository.PesssoaRepository;
 import jdev.mentoria.lojavirtual.service.PessoaUserService;
 
+import javax.validation.Valid;
+
 @RestController
 public class PessoaController {
 
@@ -33,7 +35,7 @@ public class PessoaController {
     /*end-point é microsservicos é um API*/
     @ResponseBody
     @PostMapping(value = "**/salvarPj")
-    public ResponseEntity<PessoaJuridica> salvarPj(@RequestBody PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava{
+    public ResponseEntity<PessoaJuridica> salvarPj(@RequestBody @Valid PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava{
 
         if (pessoaJuridica == null) {
             throw new ExceptionMentoriaJava("Pessoa juridica nao pode ser NULL");
@@ -59,7 +61,7 @@ public class PessoaController {
     /*end-point é microsservicos é um API*/
     @ResponseBody
     @PostMapping(value = "**/salvarPf")
-    public ResponseEntity<PessoaFisica> salvarPf(@RequestBody PessoaFisica pessoaFisica) throws ExceptionMentoriaJava{
+    public ResponseEntity<PessoaFisica> salvarPf(@RequestBody @Valid PessoaFisica pessoaFisica) throws ExceptionMentoriaJava{
 
         if (pessoaFisica == null) {
             throw new ExceptionMentoriaJava("Pessoa física não pode ser NULL");

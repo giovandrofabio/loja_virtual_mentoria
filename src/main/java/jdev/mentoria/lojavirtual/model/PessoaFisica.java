@@ -3,6 +3,7 @@ package jdev.mentoria.lojavirtual.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,7 @@ public class PessoaFisica extends Pessoa{
 
     private static final long serialVersionUID = 1L;
 
+    @CPF(message = "CPF está inválido")
     @Column(nullable = false)
     private String cpf;
     @Temporal(TemporalType.DATE)
