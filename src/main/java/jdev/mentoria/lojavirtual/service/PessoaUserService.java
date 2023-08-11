@@ -3,6 +3,8 @@ package jdev.mentoria.lojavirtual.service;
 import java.util.Calendar;
 
 
+import jdev.mentoria.lojavirtual.dto.CepDTO;
+import jdev.mentoria.lojavirtual.dto.ConsultaCnpjDto;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
 import jdev.mentoria.lojavirtual.repository.PesssoaFisicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import jdev.mentoria.lojavirtual.model.PessoaJuridica;
 import jdev.mentoria.lojavirtual.model.Usuario;
 import jdev.mentoria.lojavirtual.repository.PesssoaRepository;
 import jdev.mentoria.lojavirtual.repository.UsuarioRepository;
+import org.springframework.web.client.RestTemplate;
 
 
 @Service
@@ -139,4 +142,13 @@ public class PessoaUserService {
 
         return pessoaFisica;
     }
+
+    public CepDTO consultaCep(String cep) {
+        return new RestTemplate().getForEntity("https://viacep.com.br/ws/" + cep + "/json/", CepDTO.class).getBody();
+    }
+
+    public ConsultaCnpjDto consultaCnpjReceitaWS(String cnpj){
+        return new RestTemplate().getForEntity("https://www.receitaws.com.br/v1/cnpj/"+cnpj, ConsultaCnpjDto.class).getBody();
+    }
+
 }
