@@ -1,5 +1,7 @@
 package jdev.mentoria.lojavirtual.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jdev.mentoria.lojavirtual.enums.TipoEndereco;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,14 +14,13 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@SequenceGenerator(name="seq_pessoa", sequenceName ="seq_pessoa", allocationSize = 1, initialValue = 1)
+@SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa", initialValue = 1, allocationSize = 1)
 public abstract class Pessoa implements Serializable {
 
     private static final long serialVersionUID = 1L;

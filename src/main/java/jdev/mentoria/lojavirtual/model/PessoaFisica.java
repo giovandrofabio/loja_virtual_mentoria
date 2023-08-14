@@ -21,6 +21,7 @@ public class PessoaFisica extends Pessoa{
     @CPF(message = "CPF está inválido")
     @Column(nullable = false)
     private String cpf;
+
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
 }

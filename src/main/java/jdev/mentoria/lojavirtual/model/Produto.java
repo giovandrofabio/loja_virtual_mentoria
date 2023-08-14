@@ -75,7 +75,7 @@ public class Produto implements Serializable {
     private Integer qtdeClique = 0;
 
     @NotNull(message = "A empresa responsável deve ser informada")
-    @ManyToOne(targetEntity = Pessoa.class)
+    @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private PessoaJuridica empresa;
 
@@ -88,4 +88,9 @@ public class Produto implements Serializable {
     @ManyToOne(targetEntity = MarcaProduto.class)
     @JoinColumn(name = "marca_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_produto_id_fk"))
     private MarcaProduto marcaProduto = new MarcaProduto();
+
+    @NotNull(message = "A Nota Item do Produto deve ser informada")
+    @ManyToOne(targetEntity = NotaItemProduto.class)
+    @JoinColumn(name = "nota_item_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_item_produto_id_fk"))
+    private NotaItemProduto notaItemProduto = new NotaItemProduto();
 }
