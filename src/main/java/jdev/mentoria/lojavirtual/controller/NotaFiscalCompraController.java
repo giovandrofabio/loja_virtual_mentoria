@@ -63,11 +63,12 @@ public class NotaFiscalCompraController {
     @GetMapping(value = "**/obterNotaFiscalCompra/{id}")
     public ResponseEntity<NotaFiscalCompra> obterNotaFiscalCompra(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        NotaFiscalCompra notaFiscalCompra = notaFiscalCompraRepository.findById(id).orElse(null);
+        //NotaFiscalCompra notaFiscalCompra = notaFiscalCompraRepository.findById(id).orElse(null);
+        NotaFiscalCompra notaFiscalCompra = notaFiscalCompraRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Não foi encontrado o código: " + id));
 
-        if (notaFiscalCompra == null) {
-            throw new ExceptionMentoriaJava("Não encontrou Nota Fiscal com código: " + id);
-        }
+//        if (notaFiscalCompra == null) {
+//            throw new ExceptionMentoriaJava("Não encontrou Nota Fiscal com código: " + id);
+//        }
 
         return new ResponseEntity<NotaFiscalCompra>(notaFiscalCompra, HttpStatus.OK);
     }

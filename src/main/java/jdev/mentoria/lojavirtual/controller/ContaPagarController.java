@@ -102,11 +102,12 @@ public class ContaPagarController {
     @GetMapping(value = "**/obterContaPagar/{id}")
     public ResponseEntity<ContaPagar> obterContaPagar(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        ContaPagar contaPagar = contaPagarRepository.findById(id).orElse(null);
+        //ContaPagar contaPagar = contaPagarRepository.findById(id).orElse(null);
+        ContaPagar contaPagar = contaPagarRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Não foi encontrado o código: " + id));
 
-        if (contaPagar == null) {
-            throw new ExceptionMentoriaJava("Não encontrou Conta a Pagar com código: " + id);
-        }
+//        if (contaPagar == null) {
+//            throw new ExceptionMentoriaJava("Não encontrou Conta a Pagar com código: " + id);
+//        }
 
         return new ResponseEntity<ContaPagar>(contaPagar,HttpStatus.OK);
     }

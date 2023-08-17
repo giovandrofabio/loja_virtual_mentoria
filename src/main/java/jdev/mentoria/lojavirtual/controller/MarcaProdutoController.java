@@ -65,11 +65,12 @@ public class MarcaProdutoController {
     @GetMapping(value = "**/obterMarcaProduto/{id}")
     public ResponseEntity<MarcaProduto> obterMarcaProduto(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        MarcaProduto marcaProduto = marcaRepository.findById(id).orElse(null);
-
-        if (marcaProduto == null) {
-            throw new ExceptionMentoriaJava("Não encontrou Marca Produto com código: " + id);
-        }
+        //MarcaProduto marcaProduto = marcaRepository.findById(id).orElse(null);
+        MarcaProduto marcaProduto = marcaRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Não foi encontrado o código: " + id));
+//
+//        if (marcaProduto == null) {
+//            throw new ExceptionMentoriaJava("Não encontrou Marca Produto com código: " + id);
+//        }
 
         return new ResponseEntity<MarcaProduto>(marcaProduto,HttpStatus.OK);
     }

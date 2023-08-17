@@ -60,11 +60,12 @@ public class AcessoController {
     @GetMapping(value = "**/obterAcesso/{id}")
     public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        Acesso acesso = acessoRepository.findById(id).orElse(null);
+        //Acesso acesso = acessoRepository.findById(id).orElse(null);
+        Acesso acesso = acessoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Não foi encontrado o código: " + id));
 
-        if (acesso == null) {
-            throw new ExceptionMentoriaJava("Não encontrou Acesso com código: " + id);
-        }
+//        if (acesso == null) {
+//            throw new ExceptionMentoriaJava("Não encontrou Acesso com código: " + id);
+//        }
 
         return new ResponseEntity<Acesso>(acesso,HttpStatus.OK);
     }
