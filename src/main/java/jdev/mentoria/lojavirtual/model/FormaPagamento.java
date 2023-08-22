@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,10 +23,13 @@ public class FormaPagamento implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_form_pagamento")
     private Long id;
 
+    @NotNull(message = "Descrição deve ser informada")
     @Column(nullable = false)
     private String descricao;
 
-    @ManyToOne(targetEntity = Pessoa.class)
-    @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-    private Pessoa empresa;
+    @NotNull(message = "A empresa deve ser informada")
+    @ManyToOne(targetEntity = PessoaJuridica.class)
+    @JoinColumn(name = "empresa_id", nullable = false,
+    foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+    private PessoaJuridica empresa;
 }

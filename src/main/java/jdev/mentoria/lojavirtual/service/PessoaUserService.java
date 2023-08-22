@@ -3,6 +3,7 @@ package jdev.mentoria.lojavirtual.service;
 import java.util.Calendar;
 
 
+import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
 import jdev.mentoria.lojavirtual.dto.CepDTO;
 import jdev.mentoria.lojavirtual.dto.ConsultaCnpjDto;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
@@ -91,7 +92,7 @@ public class PessoaUserService {
 
     }
 
-    public PessoaFisica salvarPessoaFisica(PessoaFisica pessoaFisica) {
+    public PessoaFisica salvarPessoaFisica(PessoaFisica pessoaFisica) throws ExceptionMentoriaJava {
         //juridica = pesssoaRepository.save(juridica);
 
         for (int i = 0; i< pessoaFisica.getEnderecos().size(); i++) {
@@ -101,7 +102,14 @@ public class PessoaUserService {
 
         pessoaFisica = pesssoaFisicaRepository.save(pessoaFisica);
 
-        Usuario usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId(), pessoaFisica.getEmail());
+        Usuario usuarioPj = null;
+
+        try {
+            usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId(), pessoaFisica.getEmail());
+        }catch (Exception e) {
+//            e.printStackTrace();
+//            throw new ExceptionMentoriaJava("Já esse usuario cadastrado no sistema: ");
+        }
 
         if (usuarioPj == null) {
 
@@ -121,7 +129,13 @@ public class PessoaUserService {
 
             usuarioPj.setSenha(senhaCript);
 
-            usuarioPj = usuarioRepository.save(usuarioPj);
+            try {
+                usuarioPj = usuarioRepository.save(usuarioPj);
+            }catch (Exception e) {
+//            e.printStackTrace();
+             throw new ExceptionMentoriaJava("Já existe esse email cadastrado como usuario no sistema: ");
+            }
+
 
             usuarioRepository.insereAcessoUser(usuarioPj.getId());
 

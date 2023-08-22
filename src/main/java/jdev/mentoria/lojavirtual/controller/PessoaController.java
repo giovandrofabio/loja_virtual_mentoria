@@ -12,6 +12,7 @@ import jdev.mentoria.lojavirtual.repository.PesssoaFisicaRepository;
 import jdev.mentoria.lojavirtual.repository.PesssoaRepository;
 import jdev.mentoria.lojavirtual.service.PessoaUserService;
 import jdev.mentoria.lojavirtual.service.ServiceContagemAcessoApi;
+import jdev.mentoria.lojavirtual.util.FunctionUtils;
 import jdev.mentoria.lojavirtual.util.ValidaCNPJ;
 import jdev.mentoria.lojavirtual.util.ValidaCPF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,11 +136,11 @@ public class PessoaController {
             pessoaFisica.setTipoPessoa(TipoPessoa.FISICA.name());
         }
 
-        if (pessoaFisica.getId() == null && pesssoaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null) {
+        if (pessoaFisica.getId() == null && pesssoaRepository.existeCpfCadastrado(FunctionUtils.removerMascaraTexto(pessoaFisica.getCpf())) != null) {
             throw new ExceptionMentoriaJava("Já existe CPF cadastrado com o número: " + pessoaFisica.getCpf());
         }
 
-        if(!ValidaCPF.isCPF(pessoaFisica.getCpf())) {
+        if(!ValidaCPF.isCPF(FunctionUtils.removerMascaraTexto(pessoaFisica.getCpf()))) {
             throw new ExceptionMentoriaJava("CPF : " + pessoaFisica.getCpf() + " está inválido.");
         }
 
