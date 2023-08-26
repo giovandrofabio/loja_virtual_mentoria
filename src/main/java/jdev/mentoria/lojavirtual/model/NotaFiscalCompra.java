@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 
-@Getter
-@Setter
-@EqualsAndHashCode
+//@Getter
+//@Setter
+//@EqualsAndHashCode
 @Entity
 @Table(name="nota_fiscal_compra")
 @SequenceGenerator(name="seq_nota_fiscal_compra", sequenceName ="seq_nota_fiscal_compra", allocationSize = 1, initialValue = 1)
@@ -61,4 +61,117 @@ public class NotaFiscalCompra implements Serializable {
     @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private PessoaJuridica empresa;
+
+    public PessoaJuridica getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(PessoaJuridica empresa) {
+        this.empresa = empresa;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumeroNota() {
+        return numeroNota;
+    }
+
+    public void setNumeroNota(String numeroNota) {
+        this.numeroNota = numeroNota;
+    }
+
+    public String getSerieNota() {
+        return serieNota;
+    }
+
+    public void setSerieNota(String serieNota) {
+        this.serieNota = serieNota;
+    }
+
+    public String getDescricaoObs() {
+        return descricaoObs;
+    }
+
+    public void setDescricaoObs(String descricaoObs) {
+        this.descricaoObs = descricaoObs;
+    }
+
+    public BigDecimal getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(BigDecimal valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public BigDecimal getValorDesconto() {
+        return valorDesconto;
+    }
+
+    public void setValorDesconto(BigDecimal valorDesconto) {
+        this.valorDesconto = valorDesconto;
+    }
+
+    public BigDecimal getValorIcms() {
+        return valorIcms;
+    }
+
+    public void setValorIcms(BigDecimal valorIcms) {
+        this.valorIcms = valorIcms;
+    }
+
+    public Date getDataCompra() {
+        return dataCompra;
+    }
+
+    public void setDataCompra(Date dataCompra) {
+        this.dataCompra = dataCompra;
+    }
+
+    public PessoaJuridica getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(PessoaJuridica pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public ContaPagar getContaPagar() {
+        return contaPagar;
+    }
+
+    public void setContaPagar(ContaPagar contaPagar) {
+        this.contaPagar = contaPagar;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        NotaFiscalCompra other = (NotaFiscalCompra) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 }

@@ -12,4 +12,8 @@ public class FunctionUtils {
         }
         return texto.replaceAll("[^0-9a-zA-Z]", "");
     }
+
+    public static boolean isNull(Object object) {
+        return object == null;
+    }
 }

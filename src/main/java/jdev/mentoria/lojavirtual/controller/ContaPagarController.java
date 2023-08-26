@@ -52,10 +52,10 @@ public class ContaPagarController {
 //            contaPagar.setPessoa(pessoaFisica);
 //        }
 //
-//        if(contaPagar.getPessoa().getId() > 0) {
-//            PessoaJuridica pessoaJuridica = pesssoaRepository.findById(contaPagar.getPessoa_fornecedor().getId()).orElse(null);
-//            contaPagar.setPessoa_fornecedor(pessoaJuridica);
-//        }
+        if(contaPagar.getPessoa().getId() > 0) {
+            PessoaJuridica pessoaJuridica = pesssoaRepository.findById(contaPagar.getPessoa_fornecedor().getId()).orElse(null);
+            contaPagar.setPessoa_fornecedor(pessoaJuridica);
+        }
 //
 //        if(contaPagar.getPessoa().getId() > 0) {
 //            PessoaJuridica pessoaJuridica = pesssoaRepository.findById(contaPagar.getEmpresa().getId()).orElse(null);

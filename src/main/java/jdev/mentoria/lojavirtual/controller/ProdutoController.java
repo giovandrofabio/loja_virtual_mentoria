@@ -1,25 +1,34 @@
 package jdev.mentoria.lojavirtual.controller;
 
-import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
-import jdev.mentoria.lojavirtual.model.Produto;
-import jdev.mentoria.lojavirtual.repository.ProdutoRepository;
-import jdev.mentoria.lojavirtual.service.ServiceSendEmail;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.imageio.ImageIO;
-import javax.mail.MessagingException;
-import javax.validation.Valid;
-import javax.xml.bind.DatatypeConverter;
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.mail.MessagingException;
+import javax.validation.Valid;
+import javax.xml.bind.DatatypeConverter;
+
+import jdev.mentoria.lojavirtual.dto.ProdutoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
+import jdev.mentoria.lojavirtual.model.Produto;
+import jdev.mentoria.lojavirtual.repository.ProdutoRepository;
+import jdev.mentoria.lojavirtual.service.ServiceSendEmail;
 
 @Controller
 @RestController
@@ -33,8 +42,8 @@ public class ProdutoController {
 
     @ResponseBody /*Poder dar um retorno da API*/
     @PostMapping(value = "**/salvarProduto") /*Mapeando a url para receber JSON*/
-    public ResponseEntity<Produto> salvarAcesso(@RequestBody @Valid Produto produto) throws ExceptionMentoriaJava,
-            MessagingException, IOException { /*Recebe o JSON e converte pra Objeto*/
+    public ResponseEntity<ProdutoDTO> salvarAcesso(@RequestBody @Valid Produto produto) throws ExceptionMentoriaJava, MessagingException, IOException { /*Recebe o JSON e converte pra Objeto*/
+
 
         if (produto.getTipoUnidade() == null || produto.getTipoUnidade().trim().isEmpty()) {
             throw new ExceptionMentoriaJava("Tipo da unidade deve ser informada");
@@ -44,21 +53,24 @@ public class ProdutoController {
             throw new ExceptionMentoriaJava("Nome do produto deve ter mais de 10 letras.");
         }
 
+
         if (produto.getEmpresa() == null || produto.getEmpresa().getId() <= 0) {
             throw new ExceptionMentoriaJava("Empresa responsável deve ser informada");
         }
 
         if (produto.getId() == null) {
-            List<Produto> acessos = produtoRepository.buscarProdutoNome(produto.getNome().toUpperCase(), produto.getEmpresa().getId());
+            List<Produto> produtos  = produtoRepository.buscarProdutoNome(produto.getNome().toUpperCase(), produto.getEmpresa().getId());
 
-            if (!acessos.isEmpty()) {
+            if (!produtos.isEmpty()) {
                 throw new ExceptionMentoriaJava("Já existe Produto com a descrição: " + produto.getNome());
             }
         }
 
+
         if (produto.getCategoriaProduto() == null || produto.getCategoriaProduto().getId() <= 0) {
             throw new ExceptionMentoriaJava("Categoria deve ser informada");
         }
+
 
         if (produto.getMarcaProduto() == null || produto.getMarcaProduto().getId() <= 0) {
             throw new ExceptionMentoriaJava("Marca deve ser informada");
@@ -68,6 +80,8 @@ public class ProdutoController {
             throw new ExceptionMentoriaJava("O produto dever ter no minímo 1 no estoque.");
         }
 
+
+
         if (produto.getImagens() == null || produto.getImagens().isEmpty() || produto.getImagens().size() == 0) {
             throw new ExceptionMentoriaJava("Deve ser informado imagens para o produto.");
         }
@@ -76,9 +90,11 @@ public class ProdutoController {
             throw new ExceptionMentoriaJava("Deve ser informado pelo menos 3 imagens para o produto.");
         }
 
+
         if (produto.getImagens().size() > 6) {
             throw new ExceptionMentoriaJava("Deve ser informado no máximo 6 imagens.");
         }
+
 
         if (produto.getId() == null) {
 
@@ -140,9 +156,33 @@ public class ProdutoController {
             }
         }
 
-        return new ResponseEntity<Produto>(produtoSalvo, HttpStatus.OK);
+        ProdutoDTO produtoDTO = getProdutoDTO(produto);
+
+        return new ResponseEntity<ProdutoDTO>(produtoDTO, HttpStatus.OK);
     }
 
+    private static ProdutoDTO getProdutoDTO(Produto produto) {
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setId(produto.getId());
+        produtoDTO.setTipoUnidade(produto.getTipoUnidade());
+        produtoDTO.setNome(produto.getNome());
+        produtoDTO.setAtivo(produto.getAtivo());
+        produtoDTO.setDescricao(produto.getDescricao());
+        produtoDTO.setPeso(produto.getPeso());
+        produtoDTO.setLargura(produto.getLargura());
+        produtoDTO.setAltura(produto.getAltura());
+        produtoDTO.setProfundidade(produto.getProfundidade());
+        produtoDTO.setValorVenda(produto.getValorVenda());
+        produtoDTO.setQtdEstoque(produto.getQtdEstoque());
+        produtoDTO.setQtdAlertaEstoque(produto.getQtdAlertaEstoque());
+        produtoDTO.setLinkYoutube(produto.getLinkYoutube());
+        produtoDTO.setAlertaQtdeEstoque(produto.getAlertaQtdeEstoque());
+        produtoDTO.setQtdeClique(produto.getQtdeClique());
+        produtoDTO.setEmpresa(produto.getEmpresa().getNomeFantasia());
+        produtoDTO.setCategoriaProduto(produto.getCategoriaProduto().getNomeDesc());
+        produtoDTO.setMarcaProduto(produto.getMarcaProduto().getNomeDesc());
+        return produtoDTO;
+    }
 
 
     @ResponseBody /*Poder dar um retorno da API*/
@@ -169,16 +209,17 @@ public class ProdutoController {
 
     @ResponseBody
     @GetMapping(value = "**/obterProduto/{id}")
-    public ResponseEntity<Produto> obterAcesso(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
+    public ResponseEntity<ProdutoDTO> obterAcesso(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        //Produto produto = produtoRepository.findById(id).orElse(null);
         Produto produto = produtoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Não foi encontrado o código: " + id));
 
-//        if (produto == null) {
-//            throw new ExceptionMentoriaJava("Não encontrou Produto com código: " + id);
-//        }
+        if (produto == null) {
+            throw new ExceptionMentoriaJava("Não encontrou Produto com código: " + id);
+        }
 
-        return new ResponseEntity<Produto>(produto,HttpStatus.OK);
+        ProdutoDTO produtoDTO = getProdutoDTO(produto);
+
+        return new ResponseEntity<ProdutoDTO>(produtoDTO,HttpStatus.OK);
     }
 
 

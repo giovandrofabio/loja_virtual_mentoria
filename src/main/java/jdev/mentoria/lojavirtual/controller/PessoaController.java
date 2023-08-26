@@ -136,11 +136,11 @@ public class PessoaController {
             pessoaFisica.setTipoPessoa(TipoPessoa.FISICA.name());
         }
 
-        if (pessoaFisica.getId() == null && pesssoaRepository.existeCpfCadastrado(FunctionUtils.removerMascaraTexto(pessoaFisica.getCpf())) != null) {
+        if (pessoaFisica.getId() == null && pesssoaRepository.existeCpfCadastrado(pessoaFisica.getCpf()) != null) {
             throw new ExceptionMentoriaJava("Já existe CPF cadastrado com o número: " + pessoaFisica.getCpf());
         }
 
-        if(!ValidaCPF.isCPF(FunctionUtils.removerMascaraTexto(pessoaFisica.getCpf()))) {
+        if(!ValidaCPF.isCPF(pessoaFisica.getCpf())) {
             throw new ExceptionMentoriaJava("CPF : " + pessoaFisica.getCpf() + " está inválido.");
         }
 

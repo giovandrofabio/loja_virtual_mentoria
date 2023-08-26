@@ -8,6 +8,7 @@ import jdev.mentoria.lojavirtual.dto.CepDTO;
 import jdev.mentoria.lojavirtual.dto.ConsultaCnpjDto;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
 import jdev.mentoria.lojavirtual.repository.PesssoaFisicaRepository;
+import jdev.mentoria.lojavirtual.util.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -93,7 +94,9 @@ public class PessoaUserService {
     }
 
     public PessoaFisica salvarPessoaFisica(PessoaFisica pessoaFisica) throws ExceptionMentoriaJava {
-        //juridica = pesssoaRepository.save(juridica);
+
+//        PessoaFisica pessoaFisicaSalva = pesssoaFisicaRepository.findByCpf(pessoaFisica.getCpf());
+//        pessoaFisica.setId(pessoaFisicaSalva.getId());
 
         for (int i = 0; i< pessoaFisica.getEnderecos().size(); i++) {
             pessoaFisica.getEnderecos().get(i).setPessoa(pessoaFisica);
@@ -102,14 +105,7 @@ public class PessoaUserService {
 
         pessoaFisica = pesssoaFisicaRepository.save(pessoaFisica);
 
-        Usuario usuarioPj = null;
-
-        try {
-            usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId(), pessoaFisica.getEmail());
-        }catch (Exception e) {
-//            e.printStackTrace();
-//            throw new ExceptionMentoriaJava("Já esse usuario cadastrado no sistema: ");
-        }
+        Usuario usuarioPj = usuarioRepository.findUserByPessoa(pessoaFisica.getId(), pessoaFisica.getEmail());
 
         if (usuarioPj == null) {
 
@@ -163,6 +159,10 @@ public class PessoaUserService {
 
     public ConsultaCnpjDto consultaCnpjReceitaWS(String cnpj){
         return new RestTemplate().getForEntity("https://www.receitaws.com.br/v1/cnpj/"+cnpj, ConsultaCnpjDto.class).getBody();
+    }
+
+    public PessoaFisica retornaDadosPessoaFisica(String cpf){
+        return pesssoaFisicaRepository.findByCpf(cpf);
     }
 
 }

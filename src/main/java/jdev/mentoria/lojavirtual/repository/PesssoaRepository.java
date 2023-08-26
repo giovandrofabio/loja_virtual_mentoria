@@ -1,8 +1,8 @@
 package jdev.mentoria.lojavirtual.repository;
 
+import jdev.mentoria.lojavirtual.dto.PessoaJuridicaDto;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
 import jdev.mentoria.lojavirtual.model.PessoaJuridica;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PesssoaRepository extends JpaRepository<PessoaJuridica, Long> {
+public interface PesssoaRepository extends CrudRepository<PessoaJuridica, Long> {
 
     @Query(value = "select pj from PessoaJuridica pj where upper(trim(pj.nome)) like %?1%")
     public List<PessoaJuridica> pesquisaPorNomePJ(String nome);
@@ -36,4 +36,7 @@ public interface PesssoaRepository extends JpaRepository<PessoaJuridica, Long> {
 
     @Query(value = "select pj from PessoaJuridica pj where pj.inscEstadual = ?1")
     public List<PessoaJuridica> existeInsEstadualCadastradoList(String inscEstadual);
+
+    @Query(value = "select * from pessoa_juridica pj where pj.id = :id", nativeQuery = true)
+    public PessoaJuridica buscaPorId(Long id);
 }
