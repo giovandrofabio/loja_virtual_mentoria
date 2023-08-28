@@ -1,14 +1,20 @@
 package jdev.mentoria.lojavirtual.controller;
 
 import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
+import jdev.mentoria.lojavirtual.dto.NotaFiscalVendaDto;
+import jdev.mentoria.lojavirtual.dto.VendaCompraLojaVirtualDTO;
 import jdev.mentoria.lojavirtual.model.NotaFiscalCompra;
+import jdev.mentoria.lojavirtual.model.NotaFiscalVenda;
+import jdev.mentoria.lojavirtual.model.VendaCompraLojaVirtual;
 import jdev.mentoria.lojavirtual.repository.NotaFiscalCompraRepository;
+import jdev.mentoria.lojavirtual.repository.NotaFiscalVendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,6 +22,9 @@ public class NotaFiscalCompraController {
 
     @Autowired
     private NotaFiscalCompraRepository notaFiscalCompraRepository;
+
+    @Autowired
+    private NotaFiscalVendaRepository notaFiscalVendaRepository;
 
     @ResponseBody
     @PostMapping(value = "**/salvarNotaFiscalCompra")
@@ -80,5 +89,61 @@ public class NotaFiscalCompraController {
         List<NotaFiscalCompra>  notaFiscalCompras = notaFiscalCompraRepository.buscaNotaDesc(desc.toUpperCase().trim());
 
         return new ResponseEntity<List<NotaFiscalCompra>>(notaFiscalCompras,HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "**/obterNotaFiscalCompraDaVenda/{idvenda}")
+    public ResponseEntity<List<NotaFiscalVendaDto>> obterNotaFiscalCompraDaVenda(@PathVariable("idvenda") Long idvenda) throws ExceptionMentoriaJava {
+
+        List<NotaFiscalVenda> notaFiscalVenda = notaFiscalVendaRepository.buscaNotaPorVenda(idvenda);
+
+        if (notaFiscalVenda == null) {
+            throw new ExceptionMentoriaJava("Não encontrou Nota Fiscal de venda com código da venda: " + idvenda);
+        }
+
+        List<NotaFiscalVendaDto> notaFiscalVendaDtoList = new ArrayList<NotaFiscalVendaDto>();
+
+        for (NotaFiscalVenda ntf : notaFiscalVenda) {
+
+            NotaFiscalVendaDto  notaFiscalVendaDto = new NotaFiscalVendaDto();
+            notaFiscalVendaDto.setId(ntf.getId());
+            notaFiscalVendaDto.setNumero(ntf.getNumero());
+            notaFiscalVendaDto.setSerie(ntf.getSerie());
+            notaFiscalVendaDto.setTipo(ntf.getTipo());
+            notaFiscalVendaDto.setXml(ntf.getXml());
+            notaFiscalVendaDto.setPdf(ntf.getPdf());
+            notaFiscalVendaDto.getVendaCompraLojaVirtualDTO().setId(ntf.getVendaCompraLojaVirtual().getId());
+            notaFiscalVendaDto.getVendaCompraLojaVirtualDTO().setValorTotal(ntf.getVendaCompraLojaVirtual().getValorTotal());
+            notaFiscalVendaDto.setEmpresa(ntf.getEmpresa().getNome());
+            notaFiscalVendaDtoList.add(notaFiscalVendaDto);
+        }
+
+
+        return new ResponseEntity<List<NotaFiscalVendaDto>>(notaFiscalVendaDtoList, HttpStatus.OK);
+    }
+
+
+    @ResponseBody
+    @GetMapping(value = "**/obterNotaFiscalCompraDaVendaUnico/{idvenda}")
+    public ResponseEntity<NotaFiscalVendaDto> obterNotaFiscalCompraDaVendaUnico(@PathVariable("idvenda") Long idvenda) throws ExceptionMentoriaJava {
+
+        NotaFiscalVenda notaFiscalCompra = notaFiscalVendaRepository.buscaNotaPorVendaUnica(idvenda);
+
+        if (notaFiscalCompra == null) {
+            throw new ExceptionMentoriaJava("Não encontrou Nota Fiscal de venda com código da venda: " + idvenda);
+        }
+
+        NotaFiscalVendaDto  notaFiscalVendaDto = new NotaFiscalVendaDto();
+        notaFiscalVendaDto.setId(notaFiscalCompra.getId());
+        notaFiscalVendaDto.setNumero(notaFiscalCompra.getNumero());
+        notaFiscalVendaDto.setSerie(notaFiscalCompra.getSerie());
+        notaFiscalVendaDto.setTipo(notaFiscalCompra.getTipo());
+        notaFiscalVendaDto.setXml(notaFiscalCompra.getXml());
+        notaFiscalVendaDto.setPdf(notaFiscalCompra.getPdf());
+        notaFiscalVendaDto.getVendaCompraLojaVirtualDTO().setId(notaFiscalCompra.getVendaCompraLojaVirtual().getId());
+        notaFiscalVendaDto.getVendaCompraLojaVirtualDTO().setValorTotal(notaFiscalCompra.getVendaCompraLojaVirtual().getValorTotal());
+        notaFiscalVendaDto.setEmpresa(notaFiscalCompra.getEmpresa().getNome());
+
+        return new ResponseEntity<NotaFiscalVendaDto>(notaFiscalVendaDto, HttpStatus.OK);
     }
 }
