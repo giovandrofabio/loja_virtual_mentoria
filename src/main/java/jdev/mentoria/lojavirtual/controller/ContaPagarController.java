@@ -1,6 +1,8 @@
 package jdev.mentoria.lojavirtual.controller;
 
 import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
+import jdev.mentoria.lojavirtual.dto.ContaPagarDto;
+import jdev.mentoria.lojavirtual.dto.CupDescDto;
 import jdev.mentoria.lojavirtual.model.ContaPagar;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
 import jdev.mentoria.lojavirtual.model.PessoaJuridica;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +35,7 @@ public class ContaPagarController {
 
     @ResponseBody /*Poder dar um retorno da API*/
     @PostMapping(value = "**/salvarContaPagar") /*Mapeando a url para receber JSON*/
-    public ResponseEntity<ContaPagar> salvarAcesso(@RequestBody @Valid ContaPagar contaPagar) throws ExceptionMentoriaJava { /*Recebe o JSON e converte pra Objeto*/
+    public ResponseEntity<ContaPagarDto> salvarAcesso(@RequestBody @Valid ContaPagar contaPagar) throws ExceptionMentoriaJava { /*Recebe o JSON e converte pra Objeto*/
 
         if (contaPagar.getEmpresa() == null || contaPagar.getEmpresa().getId() <= 0) {
             throw new ExceptionMentoriaJava("Empresa responsável deve ser informada");
@@ -47,21 +50,10 @@ public class ContaPagarController {
             throw new ExceptionMentoriaJava("Fornecedor responsável deve ser informada");
         }
 
-//        if(contaPagar.getPessoa().getId() > 0) {
-//            PessoaFisica pessoaFisica = pesssoaFisicaRepository.findById(contaPagar.getPessoa().getId()).orElse(null);
-//            contaPagar.setPessoa(pessoaFisica);
-//        }
-//
         if(contaPagar.getPessoa().getId() > 0) {
             PessoaJuridica pessoaJuridica = pesssoaRepository.findById(contaPagar.getPessoa_fornecedor().getId()).orElse(null);
             contaPagar.setPessoa_fornecedor(pessoaJuridica);
         }
-//
-//        if(contaPagar.getPessoa().getId() > 0) {
-//            PessoaJuridica pessoaJuridica = pesssoaRepository.findById(contaPagar.getEmpresa().getId()).orElse(null);
-//            contaPagar.setEmpresa(pessoaJuridica);
-//        }
-
 
         if (contaPagar.getId() == null) {
             List<ContaPagar> contaPagars = contaPagarRepository.buscaContaDesc(contaPagar.getDescricao().toUpperCase().trim());
@@ -70,10 +62,26 @@ public class ContaPagarController {
             }
         }
 
-
         ContaPagar conPagarSalva = contaPagarRepository.save(contaPagar);
 
-        return new ResponseEntity<ContaPagar>(conPagarSalva, HttpStatus.OK);
+        ContaPagarDto contaPagarDto = getContaPagarDto(conPagarSalva);
+
+        return new ResponseEntity<ContaPagarDto>(contaPagarDto, HttpStatus.OK);
+    }
+
+    private static ContaPagarDto getContaPagarDto(ContaPagar conPagarSalva) {
+        ContaPagarDto contaPagarDto = new ContaPagarDto();
+        contaPagarDto.setId(conPagarSalva.getId());
+        contaPagarDto.setDescricao(conPagarSalva.getDescricao());
+        contaPagarDto.setValorTotal(conPagarSalva.getValorTotal());
+        contaPagarDto.setValorDesconto(conPagarSalva.getValorDesconto());
+        contaPagarDto.setStatus(conPagarSalva.getStatus());
+        contaPagarDto.setDtVencimento(conPagarSalva.getDtVencimento());
+        contaPagarDto.setDtPagamento(conPagarSalva.getDtVencimento());
+        contaPagarDto.setPessoa(conPagarSalva.getPessoa().getNome());
+        contaPagarDto.setPessoa_fornecedor(conPagarSalva.getPessoa_fornecedor().getNomeFantasia());
+        contaPagarDto.setEmpresa(conPagarSalva.getEmpresa().getNomeFantasia());
+        return contaPagarDto;
     }
 
     @ResponseBody /*Poder dar um retorno da API*/
@@ -100,26 +108,37 @@ public class ContaPagarController {
 
     @ResponseBody
     @GetMapping(value = "**/obterContaPagar/{id}")
-    public ResponseEntity<ContaPagar> obterContaPagar(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
+    public ResponseEntity<ContaPagarDto> obterContaPagar(@PathVariable("id") Long id) throws ExceptionMentoriaJava {
 
-        //ContaPagar contaPagar = contaPagarRepository.findById(id).orElse(null);
         ContaPagar contaPagar = contaPagarRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Não foi encontrado o código: " + id));
 
-//        if (contaPagar == null) {
-//            throw new ExceptionMentoriaJava("Não encontrou Conta a Pagar com código: " + id);
-//        }
+        if(contaPagar == null){
+            contaPagar = new ContaPagar();
+        }
 
-        return new ResponseEntity<ContaPagar>(contaPagar,HttpStatus.OK);
+        ContaPagarDto contaPagarDto = getContaPagarDto(contaPagar);
+
+        return new ResponseEntity<ContaPagarDto>(contaPagarDto,HttpStatus.OK);
     }
-
-
 
     @ResponseBody
     @GetMapping(value = "**/buscarContaPagarDesc/{desc}")
-    public ResponseEntity<List<ContaPagar>> buscarContaPagarDesc(@PathVariable("desc") String desc) {
+    public ResponseEntity<List<ContaPagarDto>> buscarContaPagarDesc(@PathVariable("desc") String desc) throws ExceptionMentoriaJava {
 
         List<ContaPagar> contaPagar = contaPagarRepository.buscaContaDesc(desc.toUpperCase());
 
-        return new ResponseEntity<List<ContaPagar>>(contaPagar,HttpStatus.OK);
+        if(contaPagar == null){
+            throw new ExceptionMentoriaJava("Não foi localizado nenhuma Conta Pagar");
+        }
+
+        List<ContaPagarDto> contaPagarDtoList = new ArrayList<ContaPagarDto>();
+
+        for(ContaPagar cp: contaPagar){
+            ContaPagarDto contaPagarDto = getContaPagarDto(cp);
+
+            contaPagarDtoList.add(contaPagarDto);
+        }
+
+        return new ResponseEntity<List<ContaPagarDto>>(contaPagarDtoList,HttpStatus.OK);
     }
 }
