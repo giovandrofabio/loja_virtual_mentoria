@@ -3,6 +3,7 @@ package jdev.mentoria.lojavirtual.controller;
 import jdev.mentoria.lojavirtual.ExceptionMentoriaJava;
 import jdev.mentoria.lojavirtual.dto.NotaFiscalVendaDto;
 import jdev.mentoria.lojavirtual.dto.ObejtoRequisicaoRelatorioProdCompraNotaFiscalDTO;
+import jdev.mentoria.lojavirtual.dto.ObejtoRequisicaoRelatorioProdutoAlertaEstoque;
 import jdev.mentoria.lojavirtual.dto.VendaCompraLojaVirtualDTO;
 import jdev.mentoria.lojavirtual.model.NotaFiscalCompra;
 import jdev.mentoria.lojavirtual.model.NotaFiscalVenda;
@@ -43,6 +44,21 @@ public class NotaFiscalCompraController {
 
 
         return new ResponseEntity<List<ObejtoRequisicaoRelatorioProdCompraNotaFiscalDTO>>(retorno, HttpStatus.OK);
+
+    }
+
+    @ResponseBody
+    @PostMapping(value = "**/relatorioProdAlertaEstoque")
+    public ResponseEntity<List<ObejtoRequisicaoRelatorioProdutoAlertaEstoque>> relatorioProdAlertaEstoque
+            (@Valid @RequestBody ObejtoRequisicaoRelatorioProdutoAlertaEstoque obejtoRequisicaoRelatorioProdCompraNotaFiscalDto ){
+
+        List<ObejtoRequisicaoRelatorioProdutoAlertaEstoque> retorno =
+                new ArrayList<ObejtoRequisicaoRelatorioProdutoAlertaEstoque>();
+
+        retorno = notaFiscalCompraService.gerarRelatorioAlertaEstoque(obejtoRequisicaoRelatorioProdCompraNotaFiscalDto);
+
+
+        return new ResponseEntity<List<ObejtoRequisicaoRelatorioProdutoAlertaEstoque>>(retorno, HttpStatus.OK);
 
     }
 
