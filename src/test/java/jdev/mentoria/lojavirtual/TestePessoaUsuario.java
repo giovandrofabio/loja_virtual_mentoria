@@ -6,6 +6,7 @@ import jdev.mentoria.lojavirtual.model.Endereco;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
 import jdev.mentoria.lojavirtual.model.PessoaJuridica;
 import jdev.mentoria.lojavirtual.repository.PesssoaRepository;
+import jdev.mentoria.lojavirtual.service.ServiceJunoBoleto;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,15 @@ public class TestePessoaUsuario extends TestCase {
 
     @Autowired
     private PesssoaRepository pesssoaRepository;
+
+    @Autowired
+    private ServiceJunoBoleto serviceJunoBoleto;
+
+    @Test
+    public void testeToken() throws Exception {
+
+        serviceJunoBoleto.obterTokenApiJuno();
+    }
 
     @Test
     public void testCadPessoaJuridica() throws ExceptionMentoriaJava, SQLException {
