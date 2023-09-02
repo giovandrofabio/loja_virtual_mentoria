@@ -58,6 +58,9 @@ public class Vd_Cp_loja_Virt_Controller {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private ServiceJunoBoleto serviceJunoBoleto;
+
     @ResponseBody
     @PostMapping(value = "**/salvarVendaLoja")
     public ResponseEntity<VendaCompraLojaVirtualDTO> salvarVendaLoja(@RequestBody @Valid VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava, MessagingException, UnsupportedEncodingException {
@@ -151,6 +154,12 @@ public class Vd_Cp_loja_Virt_Controller {
         serviceSendEmail.enviarEmailHtml("Venda Realizada", msgemail.toString(), vendaCompraLojaVirtual.getEmpresa().getEmail());
 
         return new ResponseEntity<VendaCompraLojaVirtualDTO>(compraLojaVirtualDTO, HttpStatus.OK);
+    }
+
+    @ResponseBody
+    @PostMapping(value = "**/gerarBoletoPix")
+    public ResponseEntity<String> gerarBoletoPix(@RequestBody @Valid ObjetoPostCarneJuno objetoPostCarneJuno) throws Exception{
+        return  new ResponseEntity<String>(serviceJunoBoleto.gerarCarneApi(objetoPostCarneJuno), HttpStatus.OK);
     }
 
     @ResponseBody

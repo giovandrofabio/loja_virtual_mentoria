@@ -1,6 +1,7 @@
 package jdev.mentoria.lojavirtual;
 
 import jdev.mentoria.lojavirtual.controller.PessoaController;
+import jdev.mentoria.lojavirtual.dto.ObjetoPostCarneJuno;
 import jdev.mentoria.lojavirtual.enums.TipoEndereco;
 import jdev.mentoria.lojavirtual.model.Endereco;
 import jdev.mentoria.lojavirtual.model.PessoaFisica;
@@ -32,7 +33,18 @@ public class TestePessoaUsuario extends TestCase {
     @Test
     public void testeToken() throws Exception {
 
-        serviceJunoBoleto.obterTokenApiJuno();
+        ObjetoPostCarneJuno objetoPostCarneJuno = new ObjetoPostCarneJuno();
+        objetoPostCarneJuno.setDescription("Teste de geração de boleto e pix");
+        objetoPostCarneJuno.setEmail("alex.fernando.egidio@gmail.com");
+        objetoPostCarneJuno.setIdVenda(18L);
+        objetoPostCarneJuno.setInstallments("6");
+        objetoPostCarneJuno.setPayerCpfCnpj("05916564937");
+        objetoPostCarneJuno.setPayerName("Alex fernando");
+        objetoPostCarneJuno.setPayerPhone("45999795800");
+        objetoPostCarneJuno.setReference("Venda de venda de loja virtual cod: 18");
+        objetoPostCarneJuno.setTotalAmount("50.00");
+        String valor =	serviceJunoBoleto.gerarCarneApi(objetoPostCarneJuno);
+        System.out.println(valor);
     }
 
     @Test
