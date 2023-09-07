@@ -32,6 +32,8 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .disable().authorizeRequests().antMatchers("/").permitAll()
                 .antMatchers("/index").permitAll()
+                .antMatchers(HttpMethod.POST, "/requisicaojunoboleto/**", "/notificacaoapiv2").permitAll()
+                .antMatchers(HttpMethod.GET, "/requisicaojunoboleto/**", "/notificacaoapiv2").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                 /* redireciona ou da um retorno para index quando desloga*/
@@ -58,6 +60,9 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter implements H
     public void configure(WebSecurity web) throws Exception {
         //web.ignoring().antMatchers(HttpMethod.GET, "/salvarAcesso","/deleteAcesso")
         //.antMatchers(HttpMethod.POST, "/salvarAcesso","/deleteAcesso");
+        web.ignoring().
+                antMatchers(HttpMethod.GET, "/requisicaojunoboleto/**", "/notificacaoapiv2")
+                .antMatchers(HttpMethod.POST,"/requisicaojunoboleto/**", "/notificacaoapiv2");
         /*Ingnorando URL no momento para não autenticar*/
     }
 }
