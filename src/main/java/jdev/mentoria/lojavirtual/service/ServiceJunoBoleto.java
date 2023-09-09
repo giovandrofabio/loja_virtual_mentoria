@@ -13,10 +13,7 @@ import javax.xml.bind.DatatypeConverter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdev.mentoria.lojavirtual.dto.BoletoGeradoApiJuno;
-import jdev.mentoria.lojavirtual.dto.CobrancaJunoAPI;
-import jdev.mentoria.lojavirtual.dto.ConteudoBoletoJuno;
-import jdev.mentoria.lojavirtual.dto.ObjetoPostCarneJuno;
+import jdev.mentoria.lojavirtual.dto.*;
 import jdev.mentoria.lojavirtual.enums.ApiTokenIntegracao;
 import jdev.mentoria.lojavirtual.model.BoletoJuno;
 import jdev.mentoria.lojavirtual.model.VendaCompraLojaVirtual;
@@ -228,5 +225,74 @@ public class ServiceJunoBoleto implements Serializable {
         }else {
             return accessTokenJunoAPI;
         }
+    }
+
+    /*
+     * {"id":"wbh_AE815607C1F5A94934934A2EA3CA0180","url":"https://lojavirtualmentoria-env.eba-bijtuvkg.sa-east-1.elasticbeanstalk.com/loja_virtual_mentoria/requisicaojunoboleto/notificacaoapiv2","secret":"23b85f4998289533ed3ee310ae9d5bd3f803fadac7fb1ecff0296fbf1bb060f8","status":"ACTIVE","eventTypes":[{"id":"evt_DC2E7E8848B08C62","name":"DOCUMENT_STATUS_CHANGED","label":"O status de um documento foi alterado","status":"ENABLED"}],"_links":{"self":{"href":"https://api.juno.com.br/api-integration/notifications/webhooks/wbh_AE815607C1F5A94934934A2EA3CA0180"}}}
+     *
+     * */
+    public String criarWebHook(CriarWebHook criarWebHook) throws Exception {
+
+        AccessTokenJunoAPI accessTokenJunoAPI = this.obterTokenApiJuno();
+
+        Client client = new HostIgnoringCliente("https://api.juno.com.br/").hostIgnoringCliente();
+        WebResource webResource = client.resource("https://api.juno.com.br/notifications/webhooks");
+
+        String json = new ObjectMapper().writeValueAsString(criarWebHook);
+
+        ClientResponse clientResponse = webResource
+                .accept("application/json;charset=UTF-8")
+                .header("Content-Type", "application/json")
+                .header("X-API-Version", 2)
+                .header("X-Resource-Token", ApiTokenIntegracao.TOKEN_PRIVATE_JUNO)
+                .header("Authorization", "Bearer " + accessTokenJunoAPI.getAccess_token())
+                .post(ClientResponse.class, json);
+
+        String resposta = clientResponse.getEntity(String.class);
+        clientResponse.close();
+
+        return resposta;
+
+    }
+
+    public String listaWebHook() throws Exception {
+
+        AccessTokenJunoAPI accessTokenJunoAPI = this.obterTokenApiJuno();
+
+        Client client = new HostIgnoringCliente("https://api.juno.com.br/").hostIgnoringCliente();
+        WebResource webResource = client.resource("https://api.juno.com.br/notifications/webhooks");
+
+        ClientResponse clientResponse = webResource
+                .accept("application/json;charset=UTF-8")
+                .header("Content-Type", "application/json")
+                .header("X-API-Version", 2)
+                .header("X-Resource-Token", ApiTokenIntegracao.TOKEN_PRIVATE_JUNO)
+                .header("Authorization", "Bearer " + accessTokenJunoAPI.getAccess_token())
+                .get(ClientResponse.class);
+
+        String resposta = clientResponse.getEntity(String.class);
+
+        return resposta;
+
+    }
+
+
+
+    public void deleteWebHook(String idWebHook) throws Exception {
+
+        AccessTokenJunoAPI accessTokenJunoAPI = this.obterTokenApiJuno();
+
+        Client client = new HostIgnoringCliente("https://api.juno.com.br/").hostIgnoringCliente();
+        WebResource webResource = client.resource("https://api.juno.com.br/notifications/webhooks/" + idWebHook);
+
+        webResource
+                .accept("application/json;charset=UTF-8")
+                .header("Content-Type", "application/json")
+                .header("X-API-Version", 2)
+                .header("X-Resource-Token", ApiTokenIntegracao.TOKEN_PRIVATE_JUNO)
+                .header("Authorization", "Bearer " + accessTokenJunoAPI.getAccess_token())
+                .delete();
+
+
     }
 }

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Profile;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-@Profile("test")
+@Profile("dev")
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
 public class TestePessoaUsuario extends TestCase {
 

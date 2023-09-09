@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-public interface BoletoJunoRepository extends JpaRepository<BoletoJuno, Long> {
+public interface BoletoJunoRepository extends JpaRepository<BoletoJuno, Long>  {
 
     @Query("select b from BoletoJuno b where b.code = ?1")
     public BoletoJuno findByCode (String code);

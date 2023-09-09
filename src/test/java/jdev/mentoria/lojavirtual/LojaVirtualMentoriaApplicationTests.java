@@ -26,7 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Calendar;
 import java.util.List;
 //@RunWith(SpringRunner.class)
-@Profile("test")
+@Profile("dev")
 @WebAppConfiguration
 @SpringBootTest(classes = LojaVirtualMentoriaApplication.class)
 public class LojaVirtualMentoriaApplicationTests extends TestCase {
